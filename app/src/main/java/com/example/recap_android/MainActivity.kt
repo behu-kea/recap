@@ -20,7 +20,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.recap_android.components.MushroomSpots
 import com.example.recap_android.models.MushroomSpot
+import com.example.recap_android.view_models.MushroomViewModel
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnrememberedMutableState")
@@ -28,38 +31,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MushroomSpots()
+            val mushroomViewModel = viewModel<MushroomViewModel>();
+
+            MushroomSpots(
+                mushroomSpotText = mushroomViewModel.mushroomSpotText,
+                mushroomSpots = mushroomViewModel.mushroomSpots,
+                onValueChange = { newText ->
+                    mushroomViewModel.onValueChange(newText)
+                },
+                onCreateMushroomClick = {
+                    mushroomViewModel.onCreateMushroomClick()
+                })
         }
     }
 }
 
-
-@Composable
-fun MushroomSpots() {
-    // Svampe samler app
-    var mushroomSpotText: String by remember { mutableStateOf("") }
-    var mushroomSpots: MutableList<MushroomSpot> = mutableStateListOf(MushroomSpot("asd"))
-
-    Column(modifier = Modifier.padding(24.dp)) {
-        Text("Svampe spot app")
-
-        TextField(value = mushroomSpotText, onValueChange = { newText ->
-            mushroomSpotText = newText
-        })
-
-        Button(onClick = {
-            val newMushroomSpot = MushroomSpot(mushroomSpotText)
-            mushroomSpots.add(newMushroomSpot)
-        }) {
-            Text("Opret svampe spot")
-        }
-
-        LazyColumn() {
-            items(mushroomSpots) { mushroomSpot ->
-                Text(mushroomSpot.spotDescription)
-            }
-        }
-
-
-    }
-}
