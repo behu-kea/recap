@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,33 +28,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            // Svampe samler app
-            var mushroomSpotText: String by remember { mutableStateOf("") }
-            var mushroomSpots: MutableList<MushroomSpot> = mutableStateListOf(MushroomSpot("asd"))
-
-            Column(modifier = Modifier.padding(24.dp)) {
-                Text("Svampe spot app")
-
-                TextField(value = mushroomSpotText, onValueChange = { newText ->
-                    mushroomSpotText = newText
-                })
-
-                Button(onClick = {
-                    val newMushroomSpot = MushroomSpot(mushroomSpotText)
-                    mushroomSpots.add(newMushroomSpot)
-                }) {
-                    Text("Opret svampe spot")
-                }
-
-                LazyColumn() {
-                    items(mushroomSpots) { mushroomSpot ->
-                        Text(mushroomSpot.spotDescription)
-                    }
-                }
-
-
-            }
+            MushroomSpots()
         }
     }
 }
 
+
+@Composable
+fun MushroomSpots() {
+    // Svampe samler app
+    var mushroomSpotText: String by remember { mutableStateOf("") }
+    var mushroomSpots: MutableList<MushroomSpot> = mutableStateListOf(MushroomSpot("asd"))
+
+    Column(modifier = Modifier.padding(24.dp)) {
+        Text("Svampe spot app")
+
+        TextField(value = mushroomSpotText, onValueChange = { newText ->
+            mushroomSpotText = newText
+        })
+
+        Button(onClick = {
+            val newMushroomSpot = MushroomSpot(mushroomSpotText)
+            mushroomSpots.add(newMushroomSpot)
+        }) {
+            Text("Opret svampe spot")
+        }
+
+        LazyColumn() {
+            items(mushroomSpots) { mushroomSpot ->
+                Text(mushroomSpot.spotDescription)
+            }
+        }
+
+
+    }
+}
